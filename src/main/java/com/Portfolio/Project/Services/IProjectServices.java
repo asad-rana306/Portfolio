@@ -7,5 +7,5 @@ import java.util.List;
 public interface IProjectServices {
     List<Project> getAllProject();
     Project saveProject(Project project);
-    Project getProjecById(Long id);
+    Project getProjectById(Long id);
 }

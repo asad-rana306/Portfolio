@@ -41,7 +41,7 @@ public class ProjectController {
     @GetMapping("getById/{id}")
     public ResponseEntity<ApiResponse> getProjectById(@PathVariable Long id){
         try{
-            Project project = projectServices.getProjecById(id);
+            Project project = projectServices.getProjectById(id);
             return ResponseEntity.ok(new ApiResponse("project fetched successfully",project));
         }catch (Exception e){
             return ResponseEntity.status(CONFLICT)

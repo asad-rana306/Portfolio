@@ -5,33 +5,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
-@Getter
-@Setter
-@Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
-//    public void setId(Long id){
-//        this.id=id;
-//    }
-//    public Long getId(){
-//        return id;
-//    }
-//    public void setName(String name){
-//        this.name=name;
-//    }
-//    public void setDescription(String description){
-//        this.description=description;
-//    }
-//    public String getName(){
-//        return name;
-//    }
-//    public String getDescription(){
-//        return description;
-//    }
 }

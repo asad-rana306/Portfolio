@@ -4,7 +4,6 @@ import com.Portfolio.Project.Model.Project;
 import com.Portfolio.Project.Repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class ProjectServices implements IProjectServices{
     }
 
     @Override
-    public Project getProjecById(Long id) {
+    public Project getProjectById(Long id) {
         return projectRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Project not found with id " + id));
     }
