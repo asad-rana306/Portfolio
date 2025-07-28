@@ -48,4 +48,32 @@ public class ProjectController {
                     .body(new ApiResponse(e.getMessage(),null));
         }
     }
+    @GetMapping("getAllByName/{name}")
+    public ResponseEntity<ApiResponse> getAllProjectsByName(@PathVariable String name){
+        try {
+            List<Project> projects = projectServices.findAllByName(name);
+            return ResponseEntity.ok(new ApiResponse("Projects fetched successfully", projects));
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+    @DeleteMapping("DeleteById/{id}")
+    public ResponseEntity<ApiResponse> deleteById(@PathVariable Long id){
+        try {
+            projectServices.deleteById(id);
+            return ResponseEntity.ok(new ApiResponse("Deleted Successfully",null));
+        } catch (Exception e) {
+            return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(),null));
+        }
+    }
+    @PutMapping("UpdateProjectById/{id}")
+    public ResponseEntity<ApiResponse> updateProject(@PathVariable Long id, @RequestBody Project project){
+        try {
+            Project theProject = projectServices.updateProject(id, project);
+            return ResponseEntity.ok(new ApiResponse("Project updated Successully",project));
+        } catch (Exception e) {
+            return ResponseEntity.status(CONFLICT)
+                    .body(new ApiResponse(e.getMessage(),null));
+        }
+    }
 }

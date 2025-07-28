@@ -8,4 +8,7 @@ public interface IProjectServices {
     List<Project> getAllProject();
     Project saveProject(Project project);
     Project getProjectById(Long id);
+    List<Project> findAllByName(String name);
+    void deleteById(Long id);
+    Project updateProject(Long id, Project project);
 }
