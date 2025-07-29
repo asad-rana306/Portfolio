@@ -1,9 +1,6 @@
 package com.Portfolio.Project.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 @Data
 @AllArgsConstructor
@@ -15,4 +12,7 @@ public class Project {
     private Long id;
     private String name;
     private String description;
+    @ManyToOne
+    @JoinColumn(name = "user_id") // This creates a foreign key in the project table
+    private User user;
 }
