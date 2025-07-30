@@ -1,7 +1,46 @@
+//package com.Portfolio.Project.Config;
+//
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.http.HttpMethod;
+//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//import org.springframework.security.web.SecurityFilterChain;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.config.Customizer;
+//
+//@Configuration
+//public class SecurityConfig {
+//
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/user/signup", "/api/user/login", "/health").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/api/project").authenticated()
+//                        .anyRequest().authenticated()
+////                                .anyRequest().permitAll()
+//                )
+//                .httpBasic(Customizer.withDefaults()) // ✅ Modern way to enable HTTP Basic Auth
+//                .formLogin(form -> form.disable());  // ✅ Disable form login (if only using Basic Auth)
+//
+//        return http.build();
+//    }
+//}
+
+
+
 package com.Portfolio.Project.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,55 +49,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfig {
 
+    // 1. Password encoder bean
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // 2. Disable security and CSRF
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // disable CSRF
                 .authorizeHttpRequests(auth -> auth
-//                        .anyRequest().permitAll()
-                        .requestMatchers("api/user/signup", "api/user/login", "/health").permitAll() // Public endpoints
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll() // allow all requests
                 )
-                .formLogin(form -> form.disable());
+                .httpBasic(Customizer.withDefaults()); // use basic auth if needed (optional)
 
         return http.build();
     }
 }
-//
-//package com.Portfolio.Project.Config;
-//
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.config.Customizer;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//
-//@Configuration
-//public class SecurityConfig {
-//
-//    // 1. Password encoder bean
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    // 2. Disable security and CSRF
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf(csrf -> csrf.disable()) // disable CSRF
-//                .authorizeHttpRequests(auth -> auth
-//                        .anyRequest().permitAll() // allow all requests
-//                )
-//                .httpBasic(Customizer.withDefaults()); // use basic auth if needed (optional)
-//
-//        return http.build();
-//    }
-//}

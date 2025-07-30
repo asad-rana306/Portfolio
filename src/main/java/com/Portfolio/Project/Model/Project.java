@@ -13,6 +13,6 @@ public class Project {
     private String name;
     private String description;
     @ManyToOne
-    @JoinColumn(name = "user_id") // This creates a foreign key in the project table
+    @JoinColumn(name = "user_id")
     private User user;
 }

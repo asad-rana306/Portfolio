@@ -1,8 +1,11 @@
 package com.Portfolio.Project.Services;
 
 import com.Portfolio.Project.Model.Project;
+import com.Portfolio.Project.Model.User;
 import com.Portfolio.Project.Repository.ProjectRepository;
+import com.Portfolio.Project.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,16 +14,28 @@ import java.util.Optional;
 @Service
 public class ProjectServices implements IProjectServices{
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private ProjectRepository projectRepository;
     @Override
     public List<Project> getAllProject() {
         return projectRepository.findAll();
     }
     @Override
-    public Project saveProject(Project project) {
-        projectRepository.save(project);
-        return project;
+    public Project saveProject(Project project, String userName) {
+        Optional<User> optionalUser = userRepository.findByUserName(userName);
+        if (optionalUser.isEmpty()) {
+            throw new UsernameNotFoundException("User not found: " + userName);
+        }
+        User user = optionalUser.get();
+        project.setUser(user);
+        Project savedProject = projectRepository.save(project);
+        user.getProjects().add(savedProject);
+        userRepository.save(user);
+
+        return savedProject;
     }
+
     @Override
     public Project getProjectById(Long id) {
         return projectRepository.findById(id)

@@ -5,12 +5,16 @@ import com.Portfolio.Project.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServices implements IUserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     public String signup(User user) {
         if (userRepository.findByUserName(user.getUserName()).isPresent())
@@ -25,5 +29,10 @@ public class UserServices implements IUserService {
         return userRepository.findByUserName(userName)
                 .map(user -> passwordEncoder.matches(rawPassword, user.getPassword()))
                 .orElse(false);
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        return userRepository.findAll();
     }
 }

@@ -1,15 +1,21 @@
 package com.Portfolio.Project.Controller;
 
 import com.Portfolio.Project.Model.Project;
+import com.Portfolio.Project.Model.User;
+import com.Portfolio.Project.Repository.UserRepository;
 import com.Portfolio.Project.Response.ApiResponse;
 import com.Portfolio.Project.Services.IProjectServices;
 import com.Portfolio.Project.Services.ProjectServices;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -20,19 +26,24 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class ProjectController {
     @Autowired
     private IProjectServices projectServices;
-    @GetMapping
-    public ResponseEntity<ApiResponse> getAllProject(){
+    @Autowired
+    private UserRepository userRepository;
+    @GetMapping("{userName}")
+    public ResponseEntity<ApiResponse> getAllProject(@PathVariable String userName){
         try {
-            List<Project> project = projectServices.getAllProject();
+            Optional<User> user1 = userRepository.findByUserName(userName);
+            User user = user1.get();
+            List<Project> project = user.getProjects();
             return ResponseEntity.ok(new ApiResponse("nothing",project));
         } catch (Exception e){
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), "null"));
         }
     }
-    @PostMapping
-    public ResponseEntity<ApiResponse> saveProject(@RequestBody Project project){
+    @PostMapping("{userName}")
+    public ResponseEntity<ApiResponse> saveProject(@RequestBody Project project, @PathVariable String userName){
         try{
-            Project theproject = projectServices.saveProject(project);
+
+            Project theproject = projectServices.saveProject(project, userName);
             return ResponseEntity.ok(new ApiResponse("project saved successfully",theproject));
         }catch(Exception e){
             return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(),null));

@@ -8,18 +8,30 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @RestController
 @RequestMapping("api/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final IUserService userServices;
+
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllUser(){
+        try {
+            List<User> user = userServices.getAllUser();
+            return ResponseEntity.ok(new ApiResponse("users",user));
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND)
+                    .body(new ApiResponse(e.getMessage(),null));
+        }
+    }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody User loginRequest) {

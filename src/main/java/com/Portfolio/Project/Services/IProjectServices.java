@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IProjectServices {
     List<Project> getAllProject();
-    Project saveProject(Project project);
+    Project saveProject(Project project, String userName);
     Project getProjectById(Long id);
     List<Project> findAllByName(String name);
     void deleteById(Long id);
