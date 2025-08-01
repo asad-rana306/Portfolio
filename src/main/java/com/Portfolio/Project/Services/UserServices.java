@@ -21,6 +21,7 @@ public class UserServices implements IUserService {
             return "user already exist";
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(List.of("USER"));
         userRepository.save(user);
         return "user registered successfully";
     }
