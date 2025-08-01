@@ -19,3 +19,6 @@ logging:
     org:
       springframework:
         security: DEBUG
+user:
+  name: Asad
+  password: asad@462

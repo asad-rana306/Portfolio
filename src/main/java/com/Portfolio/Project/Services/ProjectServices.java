@@ -5,7 +5,6 @@ import com.Portfolio.Project.Model.User;
 import com.Portfolio.Project.Repository.ProjectRepository;
 import com.Portfolio.Project.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,17 +21,9 @@ public class ProjectServices implements IProjectServices{
         return projectRepository.findAll();
     }
     @Override
-    public Project saveProject(Project project, String userName) {
-        Optional<User> optionalUser = userRepository.findByUserName(userName);
-        if (optionalUser.isEmpty()) {
-            throw new UsernameNotFoundException("User not found: " + userName);
-        }
-        User user = optionalUser.get();
+    public Project saveProject(Project project, User user) {
         project.setUser(user);
         Project savedProject = projectRepository.save(project);
-        user.getProjects().add(savedProject);
-        userRepository.save(user);
-
         return savedProject;
     }
 

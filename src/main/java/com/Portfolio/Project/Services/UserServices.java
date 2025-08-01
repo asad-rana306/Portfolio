@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -17,11 +18,18 @@ public class UserServices implements IUserService {
 
 
     public String signup(User user) {
-        if (userRepository.findByUserName(user.getUserName()).isPresent())
-            return "user already exist";
-
+        if (userRepository.findByUserName(user.getUserName()).isPresent()) {
+            return "user already exists";
+        }
+        user.setUserName(user.getUserName());
+        user.setEmail(user.getEmail());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(List.of("USER"));
+        List<String> incomingRoles = user.getRole();
+        if (incomingRoles == null || incomingRoles.isEmpty()) {
+            user.setRole(Collections.singletonList("USER"));
+        } else {
+            user.setRole(incomingRoles.stream().map(String::toUpperCase).toList());
+        }
         userRepository.save(user);
         return "user registered successfully";
     }
