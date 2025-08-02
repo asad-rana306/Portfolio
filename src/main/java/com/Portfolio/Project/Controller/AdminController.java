@@ -29,7 +29,7 @@ public class AdminController {
     private IProjectServices projectServices;
     @DeleteMapping("DeleteById/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> deleteById(@PathVariable Long id){
+    public ResponseEntity<ApiResponse> deleteProjectById(@PathVariable Long id){
         try {
             projectServices.deleteById(id);
             return ResponseEntity.ok(new ApiResponse("Deleted Successfully",null));
@@ -39,7 +39,7 @@ public class AdminController {
     }
     @PutMapping("UpdateProjectById/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> updateProject(@PathVariable Long id, @RequestBody Project project){
+    public ResponseEntity<ApiResponse> updateProjectWithId(@PathVariable Long id, @RequestBody Project project){
         try {
             Project theProject = projectServices.updateProject(id, project);
             return ResponseEntity.ok(new ApiResponse("Project updated Successully",project));

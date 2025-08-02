@@ -52,6 +52,7 @@ public class ProjectServices implements IProjectServices{
                 .orElseThrow(() ->new RuntimeException("Project not Found"));
         existingProject.setName(project.getName());
         existingProject.setDescription(project.getDescription());
+        existingProject.setUser(project.getUser());
         projectRepository.save(existingProject);
         return existingProject;
     }
