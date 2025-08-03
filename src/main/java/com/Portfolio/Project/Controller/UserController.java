@@ -3,14 +3,19 @@ package com.Portfolio.Project.Controller;
 import com.Portfolio.Project.Model.User;
 import com.Portfolio.Project.Response.ApiResponse;
 import com.Portfolio.Project.Services.IUserService;
-import com.Portfolio.Project.Services.UserServices;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.Map;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -56,4 +61,19 @@ public class UserController {
             return ResponseEntity.ok(new ApiResponse(result, null));
         }
     }
+    @GetMapping("/api/user/me")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return ResponseEntity.ok(Map.of(
+                "username", userDetails.getUsername(),
+                "roles", userDetails.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .toList()
+        ));
+    }
+
 }
