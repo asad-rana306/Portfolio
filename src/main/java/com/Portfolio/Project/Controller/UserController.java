@@ -40,15 +40,15 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody User loginRequest) {
-        boolean loginSuccess = userServices.login(loginRequest.getUserName(), loginRequest.getPassword());
-
-        if (loginSuccess) {
-            return ResponseEntity.ok(new ApiResponse("User logged in successfully", null));
+        ResponseEntity<String> loginResponse = userServices.login(loginRequest);
+        if (loginResponse.getStatusCode().is2xxSuccessful()) {
+            return ResponseEntity.ok(new ApiResponse("User logged in successfully", loginResponse.getBody()));
         } else {
-            return ResponseEntity.status(CONFLICT)
+            return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ApiResponse("Invalid username or password", null));
         }
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> signup(@RequestBody User user) {
